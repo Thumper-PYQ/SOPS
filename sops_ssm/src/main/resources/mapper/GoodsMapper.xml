@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xt.dao.GoodsPlusDao">
+
+    <resultMap id="GoodsMap" type="com.xt.pojo.GoodsPlus">
+        <id column="gid" property="gid"/>
+        <result column="gname" property="gname"/>
+        <result column="provideid" property="provideid"/>
+        <result column="numbers" property="numbers"/>
+        <result column="description" property="description"/>
+        <association property="provide" javaType="com.xt.pojo.Provide">
+            <id column="pid" property="pid"/>
+            <result column="pname" property="pname"/>
+            <result column="address" property="address"/>
+            <result column="tele" property="tele"/>
+        </association>
+    </resultMap>
+
+
+    <select id="getAllGoods" resultMap="GoodsMap">
+        select
+            t1.gid ,
+            t1.gname ,
+            t2.pname ,
+            t1.numbers ,
+            t1.description
+        from goods as t1 join provide as t2
+            on t1.provideid = t2.pid
+        <where>
+            <if test="goodsPlus.id != null and goodsPlus.id != ''">
+                and t1.gid like #{goodsPlus.gid}
+            </if>
+            <if test="goodsPlus.name != null and goodsPlus.name != ''">
+                and t1.gname like #{goodsPlus.gname}
+            </if>
+            <if test="goodsPlus.provide != null and goodsPlus.provide != ''">
+                and t2.pname like #{goodsPlus.provide.pname}
+            </if>
+            <if test="goodsPlus.description != null and goodsPlus.description != ''">
+                and t1.description like #{goodsPlus.description}
+            </if>
+        </where>
+        limit #{pageNo},#{pageSize}
+    </select>
+
+
+    <select id="getGoods" resultMap="GoodsMap">
+        select
+        t1.gid ,
+        t1.gname ,
+        t2.pname ,
+        t1.numbers ,
+        t1.description
+        from goods as t1 join provide as t2
+        on t1.provideid = t2.pid
+        <where>
+            <if test="goodsPlus.gid != null and goodsPlus.gid != ''">
+                and t1.gid like #{goodsPlus.gid}
+            </if>
+            <if test="goodsPlus.gname != null and goodsPlus.gname != ''">
+                and t1.gname like #{goodsPlus.gname}
+            </if>
+            <if test="goodsPlus.provide != null and goodsPlus.provide != ''">
+                and t2.pname like #{goodsPlus.provide.pname}
+            </if>
+            <if test="goodsPlus.description != null and goodsPlus.description != ''">
+                and t1.description like #{goodsPlus.description}
+            </if>
+        </where>
+        order by t1.gid desc
+    </select>
+
+</mapper>

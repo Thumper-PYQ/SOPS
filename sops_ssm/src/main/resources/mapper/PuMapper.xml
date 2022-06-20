@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xt.dao.PuPlusDao">
+
+    <resultMap id="PuMap" type="com.xt.pojo.PuPlus">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="age" property="age"/>
+        <result column="gender" property="gender"/>
+        <result column="tele" property="tele"/>
+        <result column="loginname" property="loginname"/>
+        <result column="password" property="password"/>
+        <result column="warehouseid" property="warehouseid"/>
+        <result column="manageid" property="manageid"/>
+        <result column="totalcount" property="totalcount"/>
+        <result column="errorcount" property="errorcount"/>
+        <association property="warehouse" javaType="com.xt.pojo.Warehouse">
+            <id column="wid" property="wid"/>
+            <result column="managerid" property="managerid"/>
+            <result column="address" property="address"/>
+            <result column="tele" property="tele"/>
+            <result column="description" property="description"/>
+        </association>
+    </resultMap>
+
+    <select id="getPu" resultMap="PuMap">
+        select
+        t1.id ,
+        t1.name ,
+        t1.age,
+        t1.gender,
+        t1.tele,
+        t1.loginname ,
+        t1.password,
+        t1.warehouseid,
+        t1.manageid,
+        t1.totalcount,
+        t1.errorcount,
+        t2.wid ,
+        t2.managerid ,
+        t2.address ,
+        t2.tele ,
+        t2.description
+        from wmu as t1 join warehouse as t2
+        on t1.warehouseid = t2.wid
+<!--        <where>-->
+<!--            <if test="wmuPlus.warehouse != null and wmuPlus.warehouse != ''">-->
+<!--                and t2.wid like #{wmuPlus.warehouse.wid}-->
+<!--                and t2.address like #{wmuPlus.warehouse.address}-->
+<!--            </if>-->
+<!--            <if test="wmuPlus.name != null and wmuPlus.name != ''">-->
+<!--                and t1.name like #{wmuPlus.name}-->
+<!--            </if>-->
+<!--        </where>-->
+        order by t1.id desc
+    </select>
+
+</mapper>
